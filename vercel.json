@@ -20,6 +20,10 @@
     {
       "source": "/api-docs.json",
       "destination": "/api/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/api/index.js"
     }
   ]
 }

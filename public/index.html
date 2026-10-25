@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de Vida - Jorge Meza</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navbar de Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Jorge Meza</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="educacion.html">Educación</a></li>
+                    <li class="nav-item"><a class="nav-link" href="experiencia.html">Experiencia</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-outline-light btn-sm px-3" href="/api-docs" target="_blank" title="Documentación interactiva de la API con Swagger">
+                            <i class="bi bi-code-slash"></i> Swagger UI
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <img src="foto.jpg" alt="Foto de Jorge Meza" class="rounded-circle profile-img">
+                </div>
+                <div class="col-md-8 text-center text-md-start">
+                    <h1 class="display-4 fw-bold">Jorge Enrique Meza Rocha</h1>
+                    <p class="lead">Profesional en Gestión de Mercados | Docente</p>
+                    <hr class="my-4 bg-light">
+                    <p><i class="bi bi-geo-alt-fill"></i> Santa Cruz de Lorica, Córdoba</p>
+                    <p><i class="bi bi-telephone-fill"></i> (321) 605-5785</p>
+                    <p><i class="bi bi-envelope-fill"></i> jmezar@unicartagena.edu.co</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="container my-5">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow-sm fade-in-element">
+                    <div class="card-body p-4">
+                        <h2 class="card-title text-primary mb-3"><i class="bi bi-person-badge"></i> Perfil Profesional</h2>
+                        <p class="card-text">Soy un profesional con experiencia en el sector administrativo, educativo y social. Con formación en Gestión de Mercados y amplia trayectoria en instituciones públicas y privadas en el departamento de Córdoba, enfocado en el desarrollo comunitario y la formación académica.</p>
+                        <h5 class="mt-4 text-secondary">Datos Básicos</h5>
+                        <ul class="list-unstyled">
+                            <li><strong>C.C.:</strong> 1.063.721.688</li>
+                            <li><strong>Fecha de Nacimiento:</strong> 02 de Junio de 1989</li>
+                            <li><strong>Lugar:</strong> Monitos, Córdoba, Colombia</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <p class="mb-0">&copy; 2026 Jorge Meza. Hoja de Vida Personal.</p>
+    </footer>
+
+    <!-- jQuery y Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Animación jQuery: Fade in al cargar -->
+    <script>
+        $(document).ready(function() {
+            $(".fade-in-element").addClass("visible");
+        });
+    </script>
+</body>
+</html>

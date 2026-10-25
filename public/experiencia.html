@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiencia - Jorge Meza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Jorge Meza</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="educacion.html">Educación</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="experiencia.html">Experiencia</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-outline-light btn-sm px-3" href="/api-docs" target="_blank" title="Documentación interactiva de la API con Swagger">
+                            <i class="bi bi-code-slash"></i> Swagger UI
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <!-- Encabezado y barra de acciones CRUD -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+            <div>
+                <h2 class="text-primary mb-1 fade-in-element"><i class="bi bi-briefcase-fill"></i> Experiencia Laboral</h2>
+                <p class="text-muted mb-0 fade-in-element">Tiempo total de experiencia: <strong>5 años 10 meses</strong></p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-primary shadow-sm" id="btnNuevaExperiencia">
+                    <i class="bi bi-plus-circle-fill"></i> Nueva Experiencia
+                </button>
+                <a href="/api-docs" target="_blank" class="btn btn-outline-secondary shadow-sm">
+                    <i class="bi bi-journal-text"></i> Swagger Docs
+                </a>
+            </div>
+        </div>
+
+        <!-- Indicador de estado de la API -->
+        <div id="apiStatusBanner" class="alert alert-info py-2 px-3 d-flex align-items-center justify-content-between mb-4 shadow-sm" style="display: none !important;">
+            <div>
+                <i class="bi bi-database-check me-2"></i>
+                <span id="apiStatusText">Cargando experiencias desde la API MongoDB...</span>
+            </div>
+            <span id="apiStatusBadge" class="badge bg-primary">API REST</span>
+        </div>
+
+        <!-- Contenedor dinámico de tarjetas de experiencia -->
+        <div class="row" id="contenedorExperiencias">
+            <div class="col-12 text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <p class="text-muted mt-2">Conectando con la API y MongoDB...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Formulario (Crear / Editar Experiencia) -->
+    <div class="modal fade" id="modalExperiencia" tabindex="-1" aria-labelledby="modalExperienciaLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg border-0">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalExperienciaLabel">
+                        <i class="bi bi-briefcase"></i> <span id="modalTitulo">Agregar Experiencia</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <form id="formExperiencia" novalidate>
+                    <div class="modal-body">
+                        <!-- Campo oculto para el ID si es edición -->
+                        <input type="hidden" id="expId">
+
+                        <div class="mb-3">
+                            <label for="expCargo" class="form-label fw-semibold">Cargo o Puesto <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="expCargo" placeholder="Ej: Docente Ocasional Tiempo Completo" required>
+                            <div class="invalid-feedback">Por favor ingresa el cargo.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="expEmpresa" class="form-label fw-semibold">Empresa o Institución <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="expEmpresa" placeholder="Ej: Escuela Naval de Cadetes Almirante Padilla" required>
+                            <div class="invalid-feedback">Por favor ingresa la institución.</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="expPeriodo" class="form-label fw-semibold">Periodo <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="expPeriodo" placeholder="Ej: Feb 2025 - Dic 2025" required>
+                                <div class="invalid-feedback">Ingresa el periodo.</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="expUbicacion" class="form-label fw-semibold">Ubicación <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="expUbicacion" placeholder="Ej: Cartagena, Bolívar" required>
+                                <div class="invalid-feedback">Ingresa la ciudad.</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="expTipoEntidad" class="form-label fw-semibold">Tipo de Entidad</label>
+                                <select class="form-select" id="expTipoEntidad">
+                                    <option value="Entidad Pública">Entidad Pública</option>
+                                    <option value="Entidad Privada" selected>Entidad Privada</option>
+                                    <option value="Independiente">Independiente</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="expOrden" class="form-label fw-semibold">Orden de Visualización</label>
+                                <input type="number" class="form-control" id="expOrden" value="1" min="1">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="expDescripcion" class="form-label fw-semibold">Descripción o Funciones</label>
+                            <textarea class="form-control" id="expDescripcion" rows="3" placeholder="Describe brevemente tus logros o responsabilidades desempeñadas..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btnGuardarExperiencia">
+                            <i class="bi bi-check-lg"></i> Guardar Experiencia
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmación de Eliminación -->
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title"><i class="bi bi-trash-fill"></i> Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar la experiencia laboral de:</p>
+                    <p class="fw-bold text-danger mb-0" id="textoEliminarExp"></p>
+                    <small class="text-muted">Esta acción eliminará el registro de la base de datos MongoDB.</small>
+                </div>
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de Notificaciones -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+        <div id="liveToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="toastMessage">Operación realizada</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <div class="container">
+            <p class="mb-1">&copy; 2026 Jorge Meza. Hoja de Vida Personal con API CRUD NoSQL.</p>
+            <small class="text-muted">Express.js &bull; MongoDB &bull; Swagger UI &bull; Postman &bull; Universidad de Cartagena</small>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Datos por defecto de respaldo (fallback si el servidor no está corriendo)
+        const fallbackExperiencias = [
+            {
+                _id: 'default-1',
+                cargo: 'Docente Ocasional Tiempo Completo',
+                empresa: 'Escuela Naval de Cadetes Almirante Padilla (CENDOVA-ESFIM)',
+                periodo: 'Feb 2025 - Dic 2025',
+                ubicacion: 'Cartagena, Bolívar',
+                tipoEntidad: 'Entidad Pública',
+                descripcion: 'Docencia e instrucción en procesos de formación naval y académica.',
+                orden: 1
+            },
+            {
+                _id: 'default-2',
+                cargo: 'Docente Ocasional Tiempo Completo',
+                empresa: 'Escuela Naval de Cadetes Almirante Padilla (CENDOVA-ESFIM)',
+                periodo: 'Mar 2024 - Dic 2024',
+                ubicacion: 'Cartagena, Bolívar',
+                tipoEntidad: 'Entidad Pública',
+                descripcion: 'Orientación curricular y docencia académica.',
+                orden: 2
+            },
+            {
+                _id: 'default-3',
+                cargo: 'Tutor',
+                empresa: 'Iglesia de Dios Pentecostal Movimiento Internacional',
+                periodo: 'Ene 2022 - Jun 2022',
+                ubicacion: 'Villavicencio, Meta',
+                tipoEntidad: 'Entidad Privada',
+                descripcion: 'Acompañamiento formativo y comunitario.',
+                orden: 3
+            },
+            {
+                _id: 'default-4',
+                cargo: 'Auxiliar Administrativo',
+                empresa: 'Fundación Educativa Ana Carmela Gómez de López / COOMUSEC',
+                periodo: '2016 - 2017',
+                ubicacion: 'Monitos, Córdoba',
+                tipoEntidad: 'Entidad Privada',
+                descripcion: 'Gestión documental y apoyo administrativo.',
+                orden: 4
+            }
+        ];
+
+        let listaExperiencias = [];
+        let idEliminarPendiente = null;
+        const modalExp = new bootstrap.Modal(document.getElementById('modalExperiencia'));
+        const modalDel = new bootstrap.Modal(document.getElementById('modalEliminar'));
+        const toastEl = document.getElementById('liveToast');
+        const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+
+        function mostrarToast(mensaje, esError = false) {
+            toastEl.className = `toast align-items-center text-white border-0 ${esError ? 'bg-danger' : 'bg-success'}`;
+            document.getElementById('toastMessage').innerText = mensaje;
+            toast.show();
+        }
+
+        // Renderizado de las tarjetas en el DOM
+        function renderizarExperiencias(items, esModoApi = true) {
+            const contenedor = document.getElementById('contenedorExperiencias');
+            contenedor.innerHTML = '';
+
+            if (!items || items.length === 0) {
+                contenedor.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-briefcase text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-3">No hay experiencias registradas actualmente.</p>
+                        <button class="btn btn-outline-primary btn-sm" onclick="abrirModalCrear()">
+                            <i class="bi bi-plus-circle"></i> Agregar la primera experiencia
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            items.forEach((exp, index) => {
+                const esPublica = exp.tipoEntidad === 'Entidad Pública';
+                const badgeClass = esPublica ? 'bg-info text-dark' : 'bg-warning text-dark';
+                const borderClass = esPublica ? 'border-primary' : 'border-secondary';
+                const titleColor = esPublica ? 'text-primary' : 'text-secondary';
+                const descripcionHtml = exp.descripcion ? `<p class="card-text text-secondary small mt-2 mb-0"><i class="bi bi-info-circle"></i> ${exp.descripcion}</p>` : '';
+
+                const col = document.createElement('div');
+                col.className = 'col-md-6 mb-4 fade-in-element visible';
+                col.innerHTML = `
+                    <div class="card h-100 shadow-sm border-start ${borderClass} border-4 position-relative">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title ${titleColor} mb-0">${exp.cargo}</h5>
+                                    <span class="badge ${badgeClass} ms-2">${exp.tipoEntidad || 'Entidad'}</span>
+                                </div>
+                                <h6 class="card-subtitle mb-2 text-muted fw-normal">${exp.empresa}</h6>
+                                <p class="card-text text-muted mb-1"><i class="bi bi-calendar-event"></i> ${exp.periodo} | <i class="bi bi-geo-alt"></i> ${exp.ubicacion}</p>
+                                ${descripcionHtml}
+                            </div>
+                            <div class="mt-3 pt-2 border-top d-flex justify-content-end gap-2">
+                                <button class="btn btn-outline-primary btn-sm btn-editar" data-id="${exp._id}" title="Editar experiencia">
+                                    <i class="bi bi-pencil-square"></i> Editar
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm btn-eliminar" data-id="${exp._id}" title="Eliminar experiencia">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                contenedor.appendChild(col);
+            });
+
+            // Asignar eventos a botones de editar y eliminar
+            document.querySelectorAll('.btn-editar').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = btn.getAttribute('data-id');
+                    abrirModalEditar(id);
+                });
+            });
+
+            document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = btn.getAttribute('data-id');
+                    solicitarEliminacion(id);
+                });
+            });
+        }
+
+        // Cargar experiencias desde el backend de Node.js Express
+        async function cargarExperiencias() {
+            const banner = document.getElementById('apiStatusBanner');
+            const statusText = document.getElementById('apiStatusText');
+            const statusBadge = document.getElementById('apiStatusBadge');
+
+            try {
+                const response = await fetch('/api/experiencias');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const resJson = await response.json();
+                if (resJson.success && Array.isArray(resJson.data)) {
+                    listaExperiencias = resJson.data;
+                    renderizarExperiencias(listaExperiencias, true);
+
+                    banner.style.display = 'flex';
+                    banner.className = 'alert alert-success py-2 px-3 d-flex align-items-center justify-content-between mb-4 shadow-sm';
+                    statusText.innerHTML = `<strong>Base de Datos MongoDB activa:</strong> Conectado a la API REST (${listaExperiencias.length} registros).`;
+                    statusBadge.className = 'badge bg-success';
+                    statusBadge.innerText = 'MongoDB Online';
+                } else {
+                    throw new Error('Respuesta no válida');
+                }
+            } catch (error) {
+                console.warn('No se pudo conectar a la API REST. Cargando datos de respaldo local.', error);
+                listaExperiencias = fallbackExperiencias;
+                renderizarExperiencias(listaExperiencias, false);
+
+                banner.style.display = 'flex';
+                banner.className = 'alert alert-warning py-2 px-3 d-flex align-items-center justify-content-between mb-4 shadow-sm';
+                statusText.innerHTML = `<strong>Modo local:</strong> Para probar el CRUD con MongoDB en vivo ejecuta <code>npm start</code> en la terminal y abre <code>http://localhost:3000/experiencia.html</code>.`;
+                statusBadge.className = 'badge bg-warning text-dark';
+                statusBadge.innerText = 'Modo Local';
+            }
+        }
+
+        // Abrir modal para Crear
+        function abrirModalCrear() {
+            document.getElementById('formExperiencia').reset();
+            document.getElementById('expId').value = '';
+            document.getElementById('modalTitulo').innerText = 'Agregar Nueva Experiencia';
+            document.getElementById('expTipoEntidad').value = 'Entidad Privada';
+            document.getElementById('expOrden').value = (listaExperiencias.length + 1);
+            document.getElementById('formExperiencia').classList.remove('was-validated');
+            modalExp.show();
+        }
+
+        // Abrir modal para Editar
+        function abrirModalEditar(id) {
+            const exp = listaExperiencias.find(item => item._id === id);
+            if (!exp) return;
+
+            document.getElementById('expId').value = exp._id;
+            document.getElementById('expCargo').value = exp.cargo || '';
+            document.getElementById('expEmpresa').value = exp.empresa || '';
+            document.getElementById('expPeriodo').value = exp.periodo || '';
+            document.getElementById('expUbicacion').value = exp.ubicacion || '';
+            document.getElementById('expTipoEntidad').value = exp.tipoEntidad || 'Entidad Privada';
+            document.getElementById('expOrden').value = exp.orden || 1;
+            document.getElementById('expDescripcion').value = exp.descripcion || '';
+            document.getElementById('modalTitulo').innerText = 'Editar Experiencia';
+            document.getElementById('formExperiencia').classList.remove('was-validated');
+            modalExp.show();
+        }
+
+        // Guardar (Crear o Actualizar)
+        document.getElementById('formExperiencia').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!this.checkValidity()) {
+                e.stopPropagation();
+                this.classList.add('was-validated');
+                return;
+            }
+
+            const id = document.getElementById('expId').value;
+            const payload = {
+                cargo: document.getElementById('expCargo').value.trim(),
+                empresa: document.getElementById('expEmpresa').value.trim(),
+                periodo: document.getElementById('expPeriodo').value.trim(),
+                ubicacion: document.getElementById('expUbicacion').value.trim(),
+                tipoEntidad: document.getElementById('expTipoEntidad').value,
+                orden: Number(document.getElementById('expOrden').value) || 1,
+                descripcion: document.getElementById('expDescripcion').value.trim()
+            };
+
+            const esEdicion = Boolean(id && !id.startsWith('default-'));
+            const url = esEdicion ? `/api/experiencias/${id}` : '/api/experiencias';
+            const method = esEdicion ? 'PUT' : 'POST';
+
+            try {
+                const res = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    mostrarToast(esEdicion ? '¡Experiencia actualizada con éxito!' : '¡Experiencia agregada con éxito!');
+                    modalExp.hide();
+                    await cargarExperiencias();
+                } else {
+                    mostrarToast(data.message || 'Error al guardar la experiencia', true);
+                }
+            } catch (err) {
+                // Si la API no está disponible en vivo, simulamos localmente en memoria
+                if (esEdicion) {
+                    const idx = listaExperiencias.findIndex(item => item._id === id);
+                    if (idx !== -1) listaExperiencias[idx] = { ...listaExperiencias[idx], ...payload };
+                    mostrarToast('Experiencia actualizada (Modo local)');
+                } else {
+                    payload._id = 'local-' + Date.now();
+                    listaExperiencias.push(payload);
+                    mostrarToast('Experiencia creada (Modo local)');
+                }
+                renderizarExperiencias(listaExperiencias, false);
+                modalExp.hide();
+            }
+        });
+
+        // Solicitar confirmación para eliminar
+        function solicitarEliminacion(id) {
+            const exp = listaExperiencias.find(item => item._id === id);
+            if (!exp) return;
+            idEliminarPendiente = id;
+            document.getElementById('textoEliminarExp').innerText = `${exp.cargo} en ${exp.empresa}`;
+            modalDel.show();
+        }
+
+        // Confirmar eliminación
+        document.getElementById('btnConfirmarEliminar').addEventListener('click', async function() {
+            if (!idEliminarPendiente) return;
+
+            const esDefault = idEliminarPendiente.startsWith('default-') || idEliminarPendiente.startsWith('local-');
+
+            if (!esDefault) {
+                try {
+                    const res = await fetch(`/api/experiencias/${idEliminarPendiente}`, {
+                        method: 'DELETE'
+                    });
+                    const data = await res.json();
+                    if (res.ok && data.success) {
+                        mostrarToast('Experiencia eliminada correctamente de MongoDB');
+                        await cargarExperiencias();
+                    } else {
+                        mostrarToast(data.message || 'Error al eliminar', true);
+                    }
+                } catch (err) {
+                    listaExperiencias = listaExperiencias.filter(item => item._id !== idEliminarPendiente);
+                    renderizarExperiencias(listaExperiencias, false);
+                    mostrarToast('Experiencia eliminada (Modo local)');
+                }
+            } else {
+                listaExperiencias = listaExperiencias.filter(item => item._id !== idEliminarPendiente);
+                renderizarExperiencias(listaExperiencias, false);
+                mostrarToast('Experiencia eliminada');
+            }
+
+            modalDel.hide();
+            idEliminarPendiente = null;
+        });
+
+        // Botón Nueva Experiencia
+        document.getElementById('btnNuevaExperiencia').addEventListener('click', abrirModalCrear);
+
+        // Inicializar carga de datos
+        document.addEventListener('DOMContentLoaded', cargarExperiencias);
+    </script>
+</body>
+</html>

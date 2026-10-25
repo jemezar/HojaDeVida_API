@@ -14,6 +14,8 @@ const swaggerSpec = require('./src/docs/swaggerSpec');
 // Inicializar Express
 const app = express();
 const PORT = process.env.PORT || 3000;
+const ROOT_DIR = process.cwd();
+const PUBLIC_DIR = path.join(ROOT_DIR, 'public');
 
 // En entornos tradicionales conectamos al arrancar
 if (!process.env.VERCEL) {
@@ -25,7 +27,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware para garantizar conexión a MongoDB en entornos Serverless (Vercel)
+// Middleware para garantizar intento de conexión a MongoDB en entornos Serverless
 app.use('/api', async (req, res, next) => {
     try {
         await connectDB();
@@ -35,8 +37,30 @@ app.use('/api', async (req, res, next) => {
     next();
 });
 
-// Servir archivos estáticos del frontend de la Hoja de Vida
-app.use(express.static(path.join(__dirname)));
+// Servir archivos estáticos (carpeta public y raíz)
+app.use(express.static(PUBLIC_DIR));
+app.use(express.static(ROOT_DIR));
+
+// Rutas explícitas para las páginas de la Hoja de Vida
+app.get('/', (req, res) => {
+    res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
+});
+
+app.get('/index.html', (req, res) => {
+    res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
+});
+
+app.get('/experiencia.html', (req, res) => {
+    res.sendFile(path.join(PUBLIC_DIR, 'experiencia.html'));
+});
+
+app.get('/educacion.html', (req, res) => {
+    res.sendFile(path.join(PUBLIC_DIR, 'educacion.html'));
+});
+
+app.get('/contacto.html', (req, res) => {
+    res.sendFile(path.join(PUBLIC_DIR, 'contacto.html'));
+});
 
 // Documentación interactiva de la API con Swagger UI
 app.use(
