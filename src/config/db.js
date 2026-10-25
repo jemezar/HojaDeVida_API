@@ -1,42 +1,66 @@
 const mongoose = require('mongoose');
 
+// Cache global para conexiones Mongoose en entornos Serverless (Vercel)
+let cached = global.mongoose;
+if (!cached) {
+    cached = global.mongoose = { conn: null, promise: null };
+}
+
 const connectDB = async () => {
+    if (cached.conn) {
+        return cached.conn;
+    }
+
     const configuredUri = process.env.MONGODB_URI;
     const defaultLocalUri = 'mongodb://127.0.0.1:27017/hoja_de_vida';
-    const uriToTry = configuredUri || defaultLocalUri;
+    const isVercel = Boolean(process.env.VERCEL);
+    const uriToTry = configuredUri || (isVercel ? null : defaultLocalUri);
 
-    // Si el usuario configuró una URI explícita que NO sea el localhost por defecto (ej. MongoDB Atlas)
+    if (!uriToTry) {
+        console.error('❌ MONGODB_URI no está configurada en las variables de entorno de Vercel.');
+        console.warn('💡 En Vercel: Ve a Settings -> Environment Variables y agrega MONGODB_URI con tu cadena de MongoDB Atlas.');
+        return null;
+    }
+
     const isCustomUri = configuredUri && !configuredUri.includes('127.0.0.1') && !configuredUri.includes('localhost');
 
     console.log(`📡 Conectando a MongoDB en: ${uriToTry.replace(/\/\/.*@/, '//<credenciales>@')}`);
 
-    try {
-        const conn = await mongoose.connect(uriToTry, {
-            serverSelectionTimeoutMS: 3000,
-        });
+    if (!cached.promise) {
+        const opts = {
+            bufferCommands: false,
+            serverSelectionTimeoutMS: 5000,
+        };
 
-        console.log(`✅ MongoDB Conectado exitosamente: ${conn.connection.host}/${conn.connection.name}`);
-        return conn;
+        cached.promise = mongoose.connect(uriToTry, opts).then((mongooseInstance) => {
+            console.log(`✅ MongoDB Conectado exitosamente: ${mongooseInstance.connection.host}/${mongooseInstance.connection.name}`);
+            return mongooseInstance;
+        });
+    }
+
+    try {
+        cached.conn = await cached.promise;
+        return cached.conn;
     } catch (error) {
+        cached.promise = null;
         console.warn(`⚠️ No se pudo conectar a MongoDB (${uriToTry}): ${error.message}`);
 
-        // Si es una URI personalizada de Atlas o remota, reportamos el error
-        if (isCustomUri) {
-            console.error('❌ Revisa tus credenciales o el acceso por IP en MongoDB Atlas.');
+        // Si estamos en Vercel o usando una URI personalizada remota (Atlas)
+        if (isVercel || isCustomUri) {
+            console.error('❌ Revisa tus credenciales o permite el acceso por IP (0.0.0.0/0) en Network Access de MongoDB Atlas.');
             return null;
         }
 
-        // Si falló el localhost, intentamos iniciar un servidor MongoDB en memoria para desarrollo inmediato
+        // Si falló en desarrollo local, intentar MongoMemoryServer
         try {
-            console.log('🔄 Intentando iniciar MongoDB en memoria (MongoMemoryServer) para pruebas inmediatas...');
+            console.log('🔄 Intentando iniciar MongoDB en memoria (MongoMemoryServer) para desarrollo local...');
             const { MongoMemoryServer } = require('mongodb-memory-server');
             const mongod = await MongoMemoryServer.create();
             const memoryUri = mongod.getUri();
 
-            const conn = await mongoose.connect(memoryUri);
-            console.log(`✅ MongoDB en Memoria conectado exitosamente: ${conn.connection.name}`);
+            cached.conn = await mongoose.connect(memoryUri);
+            console.log(`✅ MongoDB en Memoria conectado exitosamente: ${cached.conn.connection.name}`);
 
-            // Auto-poblar con los datos iniciales de Jorge Meza
             const Experiencia = require('../models/Experiencia');
             const total = await Experiencia.countDocuments();
             if (total === 0) {
@@ -82,11 +106,9 @@ const connectDB = async () => {
                 console.log('🌱 Base de datos MongoDB inicializada con 4 experiencias profesionales.');
             }
 
-            return conn;
+            return cached.conn;
         } catch (memError) {
             console.error('❌ No fue posible iniciar MongoDB en memoria:', memError.message);
-            console.warn('\n💡 Recuerda que puedes configurar tu cluster gratuito de MongoDB Atlas en el archivo .env:');
-            console.warn('  MONGODB_URI=mongodb+srv://<usuario>:<password>@cluster0.xxxxx.mongodb.net/hoja_de_vida?retryWrites=true&w=majority\n');
             return null;
         }
     }

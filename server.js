@@ -15,13 +15,25 @@ const swaggerSpec = require('./src/docs/swaggerSpec');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Conectar a la base de datos NoSQL MongoDB
-connectDB();
+// En entornos tradicionales conectamos al arrancar
+if (!process.env.VERCEL) {
+    connectDB();
+}
 
 // Middlewares globales
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Middleware para garantizar conexión a MongoDB en entornos Serverless (Vercel)
+app.use('/api', async (req, res, next) => {
+    try {
+        await connectDB();
+    } catch (err) {
+        console.error('Error conectando a BD en middleware serverless:', err.message);
+    }
+    next();
+});
 
 // Servir archivos estáticos del frontend de la Hoja de Vida
 app.use(express.static(path.join(__dirname)));
@@ -78,15 +90,17 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-    console.log(`=======================================================`);
-    console.log(`🚀 Servidor Express ejecutándose en el puerto: ${PORT}`);
-    console.log(`🌐 Aplicación web:      http://localhost:${PORT}`);
-    console.log(`💼 Página Experiencias: http://localhost:${PORT}/experiencia.html`);
-    console.log(`📖 Documentación Swagger: http://localhost:${PORT}/api-docs`);
-    console.log(`📡 Endpoint API:        http://localhost:${PORT}/api/experiencias`);
-    console.log(`=======================================================`);
-});
+// En entornos locales se inicia el servidor con listen
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`=======================================================`);
+        console.log(`🚀 Servidor Express ejecutándose en el puerto: ${PORT}`);
+        console.log(`🌐 Aplicación web:      http://localhost:${PORT}`);
+        console.log(`💼 Página Experiencias: http://localhost:${PORT}/experiencia.html`);
+        console.log(`📖 Documentación Swagger: http://localhost:${PORT}/api-docs`);
+        console.log(`📡 Endpoint API:        http://localhost:${PORT}/api/experiencias`);
+        console.log(`=======================================================`);
+    });
+}
 
 module.exports = app;

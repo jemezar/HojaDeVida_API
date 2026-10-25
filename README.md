@@ -162,3 +162,25 @@ En la página web de [experiencia.html](file:///e:/DATOS/Downloads/HojaDeVida_AP
 - **Edición y eliminación:** Cada tarjeta cuenta con botones para modificar y eliminar el registro directamente en la base de datos NoSQL.
 - **Acceso a Swagger:** Enlace directo a la interfaz interactiva de Swagger UI en la barra de navegación superior.
 - **Modo de Respaldo (Fallback):** Si el servidor no se encuentra encendido, la interfaz muestra los datos locales sin romperse y avisa al usuario amigablemente cómo inicializar la API.
+
+---
+
+## ☁️ Despliegue en Vercel (Producción)
+
+El proyecto incluye la configuración para ser desplegado como funciones Serverless en Vercel:
+
+1. **Estructura Vercel:**
+   - Archivo de configuración: `vercel.json` (enrutamiento de `/api` y `/api-docs` hacia la función serverless).
+   - Entrypoint serverless: `api/index.js`.
+   - Conexión optimizada para serverless con pool caching en `src/config/db.js`.
+
+2. **Pasos para conectar con Vercel:**
+   1. Ingresa a tu cuenta de Vercel en: **[https://vercel.com/jmezar](https://vercel.com/jmezar)**.
+   2. Haz clic en **"Add New..."** -> **"Project"**.
+   3. En la lista de repositorios de GitHub, selecciona **`jemezar/HojaDeVida_API`** y pulsa **"Import"**.
+   4. En la sección **Environment Variables**, agrega la variable:
+      - **Nombre:** `MONGODB_URI`
+      - **Valor:** Tu cadena de conexión de MongoDB Atlas (Ej: `mongodb+srv://<usuario>:<password>@cluster0.xxxxx.mongodb.net/hoja_de_vida?retryWrites=true&w=majority`).
+   5. Haz clic en **"Deploy"**.
+   6. ¡Listo! Vercel desplegará automáticamente la aplicación y cada nuevo `push` a GitHub actualizará el despliegue de forma continua (CI/CD).
+
