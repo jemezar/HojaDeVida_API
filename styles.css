@@ -1,0 +1,33 @@
+/* Estilos personalizados para complementar Bootstrap */
+body {
+    background-color: #f8f9fa;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #003366 0%, #0055a5 100%);
+    color: white;
+}
+
+.profile-img {
+    border: 5px solid white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Clases para las animaciones de jQuery */
+.fade-in-element {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-element.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+footer {
+    margin-top: 50px;
+}

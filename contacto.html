@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Jorge Meza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Jorge Meza</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="educacion.html">Educación</a></li>
+                    <li class="nav-item"><a class="nav-link" href="experiencia.html">Experiencia</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="contacto.html">Contacto</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-outline-light btn-sm px-3" href="/api-docs" target="_blank" title="Documentación interactiva de la API con Swagger">
+                            <i class="bi bi-code-slash"></i> Swagger UI
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <div class="row">
+            <!-- Info de contacto -->
+            <div class="col-md-4 mb-4 fade-in-element">
+                <div class="card bg-primary text-white shadow h-100">
+                    <div class="card-body">
+                        <h4 class="card-title"><i class="bi bi-info-circle-fill"></i> Información</h4>
+                        <hr class="bg-light">
+                        <p><i class="bi bi-telephone-fill"></i> (321) 605-5785</p>
+                        <p><i class="bi bi-envelope-fill"></i> jjmezar@unicartagena.edu.co</p>
+                        <p><i class="bi bi-geo-alt-fill"></i> CRR 8B #17-23 Barrio La Esperanza, Santa Cruz de Lorica, Córdoba.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario -->
+            <div class="col-md-8 fade-in-element">
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <h4 class="card-title text-primary mb-3"><i class="bi bi-envelope-paper-fill"></i> Envíame un Mensaje</h4>
+                        
+                        <!-- Alerta de éxito (oculta por defecto) -->
+                        <div id="successAlert" class="alert alert-success d-none" role="alert">
+                            <i class="bi bi-check-circle-fill"></i> ¡Mensaje enviado correctamente! (Simulación)
+                        </div>
+
+                        <!-- Formulario (Sin action para evitar recarga, JS lo manejará) -->
+                        <form id="contactForm" novalidate>
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre Completo</label>
+                                <input type="text" class="form-control" id="nombre" placeholder="Ej: Juan Pérez">
+                                <div class="invalid-feedback" id="nombreError">El nombre es obligatorio (mínimo 3 caracteres).</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="email" placeholder="Ej: correo@ejemplo.com">
+                                <div class="invalid-feedback" id="emailError">Por favor, ingrese un correo electrónico válido.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="mensaje" class="form-label">Mensaje</label>
+                                <textarea class="form-control" id="mensaje" rows="4" placeholder="Escriba su mensaje aquí..."></textarea>
+                                <div class="invalid-feedback" id="mensajeError">El mensaje es obligatorio (mínimo 10 caracteres).</div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100"><i class="bi bi-send-fill"></i> Enviar Mensaje</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <p class="mb-0">&copy; 2026 Jorge Meza. Hoja de Vida Personal.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- VALIDACIÓN CON JAVASCRIPT / JQUERY -->
+    <script>
+        $(document).ready(function() {
+            // 1. Animación de entrada
+            $('.fade-in-element').addClass('visible');
+
+            // 2. Validación del formulario al hacer clic en "Enviar"
+            $('#contactForm').on('submit', function(e) {
+                e.preventDefault(); // Evita que el formulario se envíe de forma tradicional (recargue la página)
+
+                let isValid = true;
+
+                // Limpiar errores previos
+                $('.form-control').removeClass('is-invalid');
+                $('#successAlert').addClass('d-none');
+
+                // Validar Nombre
+                let nombre = $('#nombre').val().trim();
+                if (nombre.length < 3) {
+                    $('#nombre').addClass('is-invalid');
+                    isValid = false;
+                }
+
+                // Validar Email con Expresión Regular (Regex)
+                let email = $('#email').val().trim();
+                let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    $('#email').addClass('is-invalid');
+                    isValid = false;
+                }
+
+                // Validar Mensaje
+                let mensaje = $('#mensaje').val().trim();
+                if (mensaje.length < 10) {
+                    $('#mensaje').addClass('is-invalid');
+                    isValid = false;
+                }
+
+                // Si todo es válido
+                if (isValid) {
+                    // Mostrar alerta de éxito con animación jQuery
+                    $('#successAlert').removeClass('d-none').hide().fadeIn('slow');
+                    
+                    // Limpiar formulario
+                    this.reset();
+
+                    // Efecto dinámico: Scroll suave hacia la alerta
+                    $('html, body').animate({
+                        scrollTop: $('#successAlert').offset().top - 100
+                    }, 800);
+                }
+            });
+
+            // 3. Quitar el error en tiempo real cuando el usuario empiece a escribir
+            $('.form-control').on('input', function() {
+                $(this).removeClass('is-invalid');
+            });
+        });
+    </script>
+</body>
+</html>

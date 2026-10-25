@@ -1,0 +1,176 @@
+{
+  "info": {
+    "_postman_id": "7f8b9c10-3456-4abc-9def-1234567890ab",
+    "name": "Hoja de Vida API - Experiencias Profesionales",
+    "description": "Colección de pruebas para el CRUD de Experiencias Profesionales de la Hoja de Vida de Jorge Meza. Unidad 3 - CTEV Universidad de Cartagena.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "experienciaId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Obtener todas las experiencias (GET)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/experiencias",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "experiencias"
+          ]
+        },
+        "description": "Obtiene la lista completa de todas las experiencias laborales registradas en MongoDB."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Crear una nueva experiencia (POST)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.success && jsonData.data && jsonData.data._id) {",
+              "    pm.collectionVariables.set('experienciaId', jsonData.data._id);",
+              "    console.log('ID guardado para siguientes pruebas:', jsonData.data._id);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cargo\": \"Consultor en Gestión de Mercados y Proyectos\",\n  \"empresa\": \"Consultores Asociados del Caribe\",\n  \"periodo\": \"Ene 2026 - Presente\",\n  \"ubicacion\": \"Montería, Córdoba\",\n  \"tipoEntidad\": \"Entidad Privada\",\n  \"descripcion\": \"Asesoría estratégica en formulación de planes de marketing y estructuración de proyectos formativos.\",\n  \"orden\": 5\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/experiencias",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "experiencias"
+          ]
+        },
+        "description": "Registra una nueva experiencia profesional en MongoDB. Guarda automáticamente el `_id` creado en la variable de colección `experienciaId`."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Obtener una experiencia por ID (GET)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/experiencias/{{experienciaId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "experiencias",
+            "{{experienciaId}}"
+          ]
+        },
+        "description": "Busca y retorna el detalle de una experiencia laboral específica usando su ObjectId de MongoDB."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Actualizar una experiencia por ID (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cargo\": \"Director de Proyectos y Gestión de Mercados\",\n  \"empresa\": \"Consultores Asociados del Caribe\",\n  \"periodo\": \"Ene 2026 - Dic 2026\",\n  \"ubicacion\": \"Montería, Córdoba\",\n  \"tipoEntidad\": \"Entidad Privada\",\n  \"descripcion\": \"Liderazgo integral en formulación, evaluación y ejecución de proyectos comerciales.\",\n  \"orden\": 5\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/experiencias/{{experienciaId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "experiencias",
+            "{{experienciaId}}"
+          ]
+        },
+        "description": "Actualiza la información de una experiencia laboral existente en MongoDB."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Eliminar una experiencia por ID (DELETE)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/experiencias/{{experienciaId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "experiencias",
+            "{{experienciaId}}"
+          ]
+        },
+        "description": "Elimina de la base de datos MongoDB la experiencia correspondiente al ID especificado."
+      },
+      "response": []
+    }
+  ]
+}

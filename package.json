@@ -1,0 +1,31 @@
+{
+  "name": "hojadevida-api",
+  "version": "1.0.0",
+  "description": "API REST con CRUD de Experiencias Profesionales para Hoja de Vida usando Express.js y MongoDB NoSQL",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node seed.js",
+    "test": "node test-api.js"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "crud",
+    "api",
+    "swagger",
+    "postman",
+    "hoja-de-vida"
+  ],
+  "author": "Jorge Enrique Meza Rocha",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "mongoose": "^9.11.4",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
