@@ -6,7 +6,7 @@
 
 ---
 
-## 📌 Descripción del Proyecto
+## Descripción del Proyecto
 
 Este proyecto implementa una **API RESTful** completa que cumple con las operaciones **CRUD** (Crear, Leer, Actualizar y Eliminar) para gestionar la información de las **experiencias profesionales** de la hoja de vida personal de Jorge Meza.
 
@@ -21,7 +21,7 @@ El sistema fue desarrollado integrando:
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```text
 HojaDeVida_API/
@@ -51,7 +51,7 @@ HojaDeVida_API/
 
 ---
 
-## 🛠️ Requisitos Previos
+## Requisitos Previos
 
 1. **Node.js**: Versión 18 o superior instalada.
 2. **MongoDB**:
@@ -60,7 +60,7 @@ HojaDeVida_API/
 
 ---
 
-## 🚀 Instalación y Puesta en Marcha
+## Instalación y Puesta en Marcha
 
 ### 1. Instalar Dependencias
 Abre la terminal en la carpeta del proyecto y ejecuta:
@@ -97,13 +97,13 @@ npm run dev
 ```
 
 El servidor estará disponible en:
-- 🌐 **Hoja de Vida Web:** [http://localhost:3000](http://localhost:3000)
-- 💼 **Gestor de Experiencias:** [http://localhost:3000/experiencia.html](http://localhost:3000/experiencia.html)
-- 📖 **Documentación Swagger UI:** [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+- **Hoja de Vida Web:** [http://localhost:3000](http://localhost:3000)
+- **Gestor de Experiencias:** [http://localhost:3000/experiencia.html](http://localhost:3000/experiencia.html)
+- **Documentación Swagger UI:** [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
 
 ---
 
-## 📑 Endpoints de la API REST
+## Endpoints de la API REST
 
 Base URL: `http://localhost:3000/api/experiencias`
 
@@ -130,7 +130,7 @@ Base URL: `http://localhost:3000/api/experiencias`
 
 ---
 
-## 🧪 Pruebas con Swagger UI
+## Pruebas con Swagger UI
 
 1. Inicia el servidor con `npm start`.
 2. Abre en tu navegador: **[http://localhost:3000/api-docs](http://localhost:3000/api-docs)**.
@@ -139,7 +139,7 @@ Base URL: `http://localhost:3000/api/experiencias`
 
 ---
 
-## 📮 Pruebas con Postman
+## Pruebas con Postman
 
 1. Abre **Postman**.
 2. Haz clic en el botón **Import** (arriba a la izquierda).
@@ -154,7 +154,7 @@ Base URL: `http://localhost:3000/api/experiencias`
 
 ---
 
-## 💻 Integración en la Interfaz Web (`experiencia.html`)
+## Integración en la Interfaz Web (`experiencia.html`)
 
 En la página web de [experiencia.html](file:///e:/DATOS/Downloads/HojaDeVida_API/experiencia.html) se integraron las siguientes mejoras:
 - **Carga dinámica:** Las tarjetas se renderizan directamente consumiendo la API de Node.js y MongoDB.
@@ -165,7 +165,7 @@ En la página web de [experiencia.html](file:///e:/DATOS/Downloads/HojaDeVida_AP
 
 ---
 
-## ☁️ Despliegue en Vercel (Producción)
+## Despliegue en Vercel (Producción)
 
 El proyecto incluye la configuración para ser desplegado como funciones Serverless en Vercel:
 
