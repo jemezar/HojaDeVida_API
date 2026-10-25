@@ -1,8 +1,16 @@
 # Hoja de Vida - API REST con CRUD de Experiencias Profesionales
 
-**Actividad Unidad 3 - CTEV Universidad de Cartagena**  
-**Autor:** Jorge Enrique Meza Rocha  
-**Programa:** Hoja de Vida Digital / Aplicaciones Web  
+**Actividad Unidad 3 - Desarrollo de Api's**  
+**Jorge Enrique Meza Rocha**
+**Código Estudiantil: 7532510038**
+
+**Universidad de Cartagena**
+**Ingeniería de Software**
+**Desarrollo de Software Web**
+**Martin Indaburo Alvarez**
+
+**Lorica, Córdoba, Colombia**
+**25 de octubre de 2026**
 
 ---
 
