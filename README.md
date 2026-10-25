@@ -2,14 +2,19 @@
 
 **Actividad Unidad 3 - Desarrollo de Api's**  
 **Jorge Enrique Meza Rocha**
+
 **Código Estudiantil: 7532510038**
 
 **Universidad de Cartagena**
+
 **Ingeniería de Software**
+
 **Desarrollo de Software Web**
+
 **Martin Indaburo Alvarez**
 
 **Lorica, Córdoba, Colombia**
+
 **25 de octubre de 2026**
 
 ---
